@@ -9,8 +9,9 @@ bkxshdtx='sessionid=6e52cab4cefa43c193f3a466b0c33111'
 withdraws='' 1为1元 2为5元 3为10元 4为30元 5为50元 6为100元
 每天额度是每天刷新的10点吧 
 建议一天别跑多了 怕黑 
+cron: 56,58 59 9 1/5 * * nm_bkxstx.js
 */
-//cron: 56,58 59 9 */5 * * nm_bkxstx.js
+
 const $ = new Env('必看小说提现');
 var crypto = require("crypto");
 let status;
