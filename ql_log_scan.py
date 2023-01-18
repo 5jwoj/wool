@@ -8,7 +8,7 @@ import traceback
 from depend import Depend
 
 '''
-cron: 30 23 * * *
+cron: 30 20 * * *
 new Env('青龙日志分析');
 ########环境变量设置#########
 
