@@ -162,7 +162,7 @@ class QlLogScan(Depend):
             result += "👷‍♀️读取日志异常日志：\n\n"
             for i in self.log_stat["readlog_err"]:
                 result += "⚠" + i + "\n"
-        send("🐲青龙日志分析", result)
+        send("💎🐏羊毛日志分析", result)
         return result
 
     def auto_depend(self):
