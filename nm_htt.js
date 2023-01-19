@@ -1,7 +1,6 @@
 /*
 惠头条
 邀请码(888金币) 30068231
-
 ===========ql===========
 点击任务捉包
 [rewrite_local]
@@ -13,7 +12,7 @@ hostname = api.cashtoutiao.com
 export htthd='{"loginId":"替换的","userId":替换的}'
 多账号用@隔开
 */
-//cron: */60 * * * * nm_htt.js
+//cron: */20 6-23/1 * * * nm_htt.js
 const $ = new Env('惠头条');
 let status;
 status = (status = ($.getval("httstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
