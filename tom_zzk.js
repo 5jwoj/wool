@@ -1,12 +1,12 @@
 /*
 变量名：zzk_cookie
 
+抓包关键词：zzk.cn/wap_api/public/index
 打开app在首页找到奖励金，进入任务中心即可。
-
-抓包关键词：https://qfapi.zzk.cn/wap_api/public/index
 找到header里的Cookie
 多账号用&分割
-
+app下载地址：https://www.app.zzk.cn/store-view/share/inviteShare?uid=78961&type=1
+邀请码：772895
 
 单号每天3毛左右，一天运行个五六七八次就好了。
 cron: 8 5-23/2 * * * tom_zzk.js
