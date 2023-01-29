@@ -1,8 +1,11 @@
-# 变量名 sbzck 一行一个
-# 定时自己看着来
-# cron: 30 8-22/2 * * *
+# 变量名 sbzck
+# 一行一个 抓包uuid填进去 多账号换行 一天一到两次
+# @超级弟中弟
+# 软件名:赏帮赚
+# 自动做死单，时间到自动通过，大毛
+# cron: 30 8,18 * * *
 # new Env('赏帮赚');
-# 注册链接 http://xyinmw.ddkuaidobanchq6hb.cn/5605767
+# 注册链接 http://xyinmw.ddkuaidobanchq6hb.cn/6381630
 import json #line:1
 import os #line:2
 import sys #line:3
@@ -97,7 +100,7 @@ def config ():#line:123
     print (wtgdata )#line:139
 def get_ck ():#line:142
     global token #line:143
-    if "sbztoken"in os .environ :#line:145
+    if "sbzck"in os .environ :#line:145
         O0000OO0O00O000OO =[]#line:146
         OO0O000OOOOO0OOO0 =os .environ ['sbzck'].replace ('http',"\n")#line:147
         OO0O000OOOOO0OOO0 =OO0O000OOOOO0OOO0 .split ('\n')#line:148
@@ -107,7 +110,7 @@ def get_ck ():#line:142
         if len (O0000OO0O00O000OO )>0 :#line:152
             return O0000OO0O00O000OO #line:153
         else :#line:154
-            print ("sbztoken变量未启用")#line:155
+            print ("sbzck变量未启用")#line:155
             sys .exit (1 )#line:156
     else :#line:157
         try :#line:158
@@ -182,3 +185,4 @@ def request_post (O00OO00000O00OO00 ,O0O000O0OO00OOO00 ):#line:225
         else :#line:246
             break #line:247
     return O00OOOO0O00OOO00O #line:248
+
