@@ -5,7 +5,7 @@
 变量名:wxyhck
 手机号注册登录软件后，抓包http://appapi.chinamcloud.com/api/开头的，找到user_id#token作为变量，多账号用@隔开
 定时:一天一次
-我的邀请码:2a53fb 欢迎大家填写！！
+邀请码:77e79f
 cron: 25 14 * * * dcf_wxyh.js
 const $ = new Env('无限玉环')
 */
