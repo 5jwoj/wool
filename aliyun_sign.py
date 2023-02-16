@@ -10,6 +10,14 @@ token有效期未知，报错就换token
 变量:ali_ck   多账号#号隔开
 bay:妖火网
 分享:大帅哔
+
+
+浏览器打开 阿里云盘 aliyundrive.com
+登陆后
+使用快捷键 Ctrl + Shift + C edge浏览器或者google chrome 打开开发者控制台，选择 Console（控制台）粘贴下面的代码
+
+alert(JSON.parse(localStorage.token).refresh_token)
+
 '''
 
 def load_send():
