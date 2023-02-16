@@ -8,9 +8,6 @@ new Env('阿里云盘签到');
 APP抓包refresh_token
 token有效期未知，报错就换token
 变量:ali_ck   多账号#号隔开
-bay:妖火网
-分享:大帅哔
-
 
 浏览器打开 阿里云盘 aliyundrive.com
 登陆后
