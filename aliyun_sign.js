@@ -1,26 +1,51 @@
-//阿里云盘连续签到活动
-//cron: 8 8,18 * * * aliyun_sign.js
-//const $ = new Env('阿里云盘签到')
+/*阿里云盘连续签到活动
+cron: 8 8,18 * * * aliyun_sign.js
+const $ = new Env('阿里云盘签到')
+环境变量:ALI_TOKEN,多账号用换行或@或&分隔
 
+浏览器打开 阿里云盘 aliyundrive.com
+登陆后
+使用快捷键 Ctrl + Shift + C edge浏览器或者google chrome 打开开发者控制台，选择 Console（控制台）粘贴下面的代码
+
+alert(JSON.parse(localStorage.token).refresh_token)
+
+*/
 const $ = API();
-const refresh_token = '';//抓包搜请求体关键字:refresh_token
-
+let refresh_token = [];
+let msg = [];
 !(async () => {
 
-    if (!refresh_token) {
-        console.log('先填写refresh_token!');
-        return
+    if ($.env.isNode) {
+        if (process.env.ALI_TOKEN) {
+            if (process.env.ALI_TOKEN.indexOf('&') > -1) {
+                refresh_token = process.env.ALI_TOKEN.split('&');
+            } else if (process.env.ALI_TOKEN.indexOf('\n') > -1) {
+                refresh_token = process.env.ALI_TOKEN.split('\n');
+            } else if (process.env.ALI_TOKEN.indexOf('@') > -1) {
+                refresh_token = process.env.ALI_TOKEN.split('@');
+            } else {
+                refresh_token = [process.env.ALI_TOKEN];
+            }
+        }
     }
-    await main();
-    
+
+    if (!refresh_token || refresh_token.length == 0) {
+        console.log('先填写refresh_token!');
+        return;
+    }
+    for (const tk of refresh_token) {
+        msg = [];
+        await main(tk);
+        await $.wait(1000);
+    }
+
 })().catch(async (e) => {
     console.log('', '❌失败! 原因:' + e + '!', '');
 }).finally(() => {
     $.done();
 });
 
-var token = "";
-async function main() {
+async function main(tk) {
     try {
         const url = `https://auth.aliyundrive.com/v2/account/token`;
         const method = `POST`;
@@ -33,7 +58,7 @@ async function main() {
             'Accept-Language': `zh-CN,zh-Hans;q=0.9`,
             'Accept': `*/*`
         };
-        const body = `{"grant_type":"refresh_token","app_id":"pJZInNHN2dZWk8qg","refresh_token":"${refresh_token}"}`;
+        const body = `{"grant_type":"refresh_token","app_id":"pJZInNHN2dZWk8qg","refresh_token":"${tk}"}`;
 
         const myRequest = {
             url: url,
@@ -47,11 +72,13 @@ async function main() {
         if (data.code == 'InvalidParameter.RefreshToken') {
             //{"code":"InvalidParameter.RefreshToken","message":"The input parameter refresh_token is not valid. ","requestId":null}
             console.log(`token刷新失败,${data.message}`);
+            msg.push(`token刷新失败,${data.message}`);
         }
-        else{
+        else {
             console.log(data.nick_name);
-            token = data.access_token;
-            await sign();
+            let token = data.access_token;
+            msg.push(data.nick_name);
+            await sign(token);
         }
 
     } catch (error) {
@@ -59,7 +86,7 @@ async function main() {
     }
 }
 
-async function sign() {
+async function sign(token) {
     try {
         const url = `https://member.aliyundrive.com/v1/activity/sign_in_list`;
         const method = `POST`;
@@ -87,10 +114,12 @@ async function sign() {
         let data = JSON.parse(a.body);
         if (data.success) {
             console.log(`已连续签到${data.result.signInCount}天!`);
-            await sign_in_reward(data.result.signInCount);
+            msg.push(`已连续签到${data.result.signInCount}天!`);
+            await sign_in_reward(token, data.result.signInCount);
         }
         else {
             console.log(`签到失败,${data.message}!`);
+            msg.push(`签到失败,${data.message}!`);
         }
 
     } catch (error) {
@@ -98,7 +127,7 @@ async function sign() {
     }
 }
 
-async function sign_in_reward(day) {
+async function sign_in_reward(token, day) {
     try {
         const url = `https://member.aliyundrive.com/v1/activity/sign_in_reward`;
         const method = `POST`;
@@ -126,10 +155,30 @@ async function sign_in_reward(day) {
         let a = await $.http.post(myRequest);
         let data = JSON.parse(a.body);
         if (data.success) {
-            console.log(`奖励:${data.result.name},${data.result.description},${data.result.notice}!`);
+            if (data?.result?.name) {
+                console.log(`🎁奖励:${data?.result?.name},${data?.result?.description},${data?.result?.notice}!`);
+                msg.push(`🎁奖励:${data?.result?.name},${data?.result?.description},${data?.result?.notice}!`);
+            }
+            else {
+                console.log(`🎁奖励:领了个寂寞!`);
+                msg.push(`🎁奖励:领了个寂寞!`);
+            }
         }
         else {
-            console.log(`奖励获取失败:${data.message}!`);
+            console.log(`🎁奖励获取失败:${data.message}!`);
+            msg.push(`🎁奖励获取失败:${data.message}!`);
+        }
+
+        try {
+            if ($.env.isNode) {
+                const notify = require('./sendNotify');
+                notify.sendNotify('【阿里云盘】' + msg[0], msg[1] + ',' + msg[2]);
+            }
+            else {
+                $.notify('【阿里云盘】' + msg[0], msg[1] + ',' + msg[2]);
+            }
+        } catch (error) {
+            console.log('通知发送失败', +error);
         }
 
     } catch (error) {
